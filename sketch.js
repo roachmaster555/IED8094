@@ -57,7 +57,8 @@ function setup() {
   }
   
   createCanvas(2960, 1440);
-  webcam = createCapture(rearSetting);
+  //webcam = createCapture(rearSetting);
+  webcam = createCapture(VIDEO);
   webcam.size(2960, 1224);
   webcam.hide();
   
