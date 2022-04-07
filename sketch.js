@@ -28,6 +28,9 @@ let fileName;
 
 let rearSetting;
 
+
+let resolution = 1;
+
 function preload() {  
   detector = ml5.objectDetector('cocossd');
   
@@ -56,11 +59,12 @@ function setup() {
     }
   }
   
-  //createCanvas(2960, 1440);
-  createCanvas(windowWidth, windowHeight);
-  webcam = createCapture(rearSetting);
-  //webcam.size(2960, 1224);
-  webcam.size(windowWidth, windowHeight);
+  createCanvas(740*resolution, 360*resolution);
+  //createCanvas(windowWidth, windowHeight);
+  webcam = createCapture(VIDEO);
+  //webcam = createCapture(rearSetting);
+  webcam.size(740*resolution, 360*resolution);
+  //webcam.size(windowWidth, windowHeight);
   webcam.hide();
   
   myVideoRec = new P5MovRec();
@@ -71,14 +75,14 @@ function setup() {
 function draw() {
   background(0);
   calculateRecordingTime();
-  //drawVideoPreview(0,0,2960,1224);
-  drawVideoPreview(0,0,windowWidth,windowHeight);
+  drawVideoPreview(0,0,740*resolution, 360*resolution);
+  //drawVideoPreview(0,0,windowWidth,windowHeight);
   if(state==1){
     doCOCOSSD();
     writeLog();
   }
-  drawButtons(state);
   drawStatusBar(state);
+  drawButtons(state);
   drawCounter(state);
   saveReport();
   peopleNumber = 0;
@@ -90,13 +94,13 @@ function drawVideoPreview(x, y, w, h){
 
 function drawButtons(currentState){
   if(currentState == 3){
-    image(btn_stop[0], 234*4, 312*4, 72*4, 40*4);
-    image(btn_stop[1], 334*4, 312*4, 72*4, 40*4);
-    image(btn_stop[2], 434*4, 312*4, 72*4, 40*4);
+    image(btn_stop[0], 234*resolution, 312*resolution, 72*resolution, 40*resolution);
+    image(btn_stop[1], 334*resolution, 312*resolution, 72*resolution, 40*resolution);
+    image(btn_stop[2], 434*resolution, 312*resolution, 72*resolution, 40*resolution);
   }
   else{
-    image(btn_pause[currentState], 1200, 1272, 28*4, 28*4);
-    image(btn_record[currentState], 1400, 1248, 40*4, 40*4);
+    image(btn_pause[currentState], 300*resolution, 318*resolution, 28*resolution, 28*resolution);
+    image(btn_record[currentState], 350*resolution, 312*resolution, 40*resolution, 40*resolution);
   }
 }
 
@@ -105,20 +109,20 @@ function drawCounter(currentState){
   noStroke();
   
   textFont('Roboto');
-  textSize(20*4);
+  textSize(20*resolution);
   
   if(currentState == 1){
     fill(255);
     textAlign(LEFT);
-    text(peopleNumber, 708*4, 339*4);
-    image(icon_person[0], 692*4,324*4,12*4,16*4);
+    text(peopleNumber, 708*resolution, 339*resolution);
+    image(icon_person[0], 692*resolution,324*resolution,12*resolution,16*resolution);
   }
   else if(currentState == 2){
     fill(255, 153);
     textAlign(LEFT);
-    text(peopleNumber, 708*4, 339*4);
+    text(peopleNumber, 708*resolution, 339*resolution);
     tint(255,153);
-    image(icon_person[1], 692*4,324*4,12*4,16*4);
+    image(icon_person[1], 692*resolution,324*resolution,12*resolution,16*resolution);
     tint(255);
   }
 }
@@ -126,11 +130,11 @@ function drawCounter(currentState){
 function drawStatusBar(currentState){
   fill(0);
   noStroke();
-  rect(0,306*4, 740*4, 54*4);
+  rect(0,306*resolution, 740*resolution, 54*resolution);
   
   fill(255, 51);
   noStroke();
-  rect(14*4,312*4,72*4,40*4,10*4);
+  rect(14*resolution,312*resolution,72*resolution,40*resolution,10*resolution);
   
   textFont('Roboto');
   
@@ -141,26 +145,26 @@ function drawStatusBar(currentState){
   
   if(currentState==0){
     fill(255,153);
-    textSize(20*4);
-    text(recordingTime, 437*4,340*4);
+    textSize(20*resolution);
+    text(recordingTime, 437*resolution,340*resolution);
   }
   else if(currentState==1){
     fill(186,8,8);
-    textSize(20*4);
-    text(recordingTime, 437*4,340*4);
+    textSize(20*resolution);
+    text(recordingTime, 437*resolution,340*resolution);
     fill(255)
   }
   else if(currentState==2){
     fill(186,8,8, 153);
-    textSize(20*4);
-    text(recordingTime, 437*4,340*4);
+    textSize(20*resolution);
+    text(recordingTime, 437*resolution,340*resolution);
     fill(255,153)
   }
   else{
     fill(255,153)
   }
-  textSize(12*4);
-  text(currentTime, 50*4, 330*4);
+  textSize(12*resolution);
+  text(currentTime, 50*resolution, 330*resolution);
 }
 
 
@@ -177,28 +181,28 @@ function gotDetections(error, results) {
 
 function mouseReleased(){
   if(state == 0){
-    if(dist(mouseX, mouseY, 740*4/2, 333*4) <= 20*4){ // for Recording BTN
+    if(dist(mouseX, mouseY, 740*resolution/2, 333*resolution) <= 20*resolution){ // for Recording BTN
       state = 1; //go to 1.Recording Page from 0.Main Page.
       recordingStartTime = millis();
       startLog();
       myVideoRec.startRec(); // start recording video
     }
   }else if(state == 1){
-    if(dist(mouseX, mouseY, 314*4, 333*4) <= 14*4){ // for Pause BTN
+    if(dist(mouseX, mouseY, 314*resolution, 333*resolution) <= 14*resolution){ // for Pause BTN
       state = 2; //go to 2.Paused Page from 1.Recording Page.
       pausedStartTime = millis();
     }
-    if(dist(mouseX, mouseY, 740*4/2, 333*4) <= 20*4){ // for Stop BTN
+    if(dist(mouseX, mouseY, 740*resolution/2, 333*resolution) <= 20*resolution){ // for Stop BTN
       state = 3; //go to 3.Saved Page from 1.Recording Page.
       pausedStartTime = millis();      
     }
   }else if(state == 2){
-    if(dist(mouseX, mouseY, 740*4/2, 333*4) <= 20*4){ // for Recording BTN
+    if(dist(mouseX, mouseY, 740*resolution/2, 333*resolution) <= 20*resolution){ // for Recording BTN
       state = 1; //go to 1.Recording Page from 2.Paused Page.
       totalPausedTime = totalPausedTime + pausedTime;
     }
   }else if(state == 3){
-    if(234*4<=mouseX && mouseX <=306*4 && 312*4<=mouseY && mouseY<=352*4){ //SAVE
+    if(234*resolution<=mouseX && mouseX <=306*resolution && 312*resolution<=mouseY && mouseY<=352*resolution){ //SAVE
       state = 0; //go to 0.Main Page from 3.Saved Page.
       initializeTimes();
       saveLog();
@@ -206,7 +210,7 @@ function mouseReleased(){
       recordingTime = '00:00:00';
       print("SAVED!")
     }
-    else if(334*4<=mouseX && mouseX<=406*4 && 312*4<=mouseY && mouseY<=352*4){ //DISCARD
+    else if(334*resolution<=mouseX && mouseX<=406*resolution && 312*resolution<=mouseY && mouseY<=352*resolution){ //DISCARD
       state = 0; //go to 0.Main Page from 3.Saved Page.
       initializeTimes();
       myWriter.clear();
@@ -215,7 +219,7 @@ function mouseReleased(){
       recordingTime = '00:00:00';
       print("DISCARDED!")
     }
-    else if(434*4<=mouseX && mouseX<=506*4 && 312*4<=mouseY && mouseY<=352*4){ //CANCEL
+    else if(434*resolution<=mouseX && mouseX<=506*resolution && 312*resolution<=mouseY && mouseY<=352*resolution){ //CANCEL
       state = 2; //go to 0.Main Page from 3.Saved Page.
       print("CLOSED!")
     }
@@ -257,17 +261,17 @@ function doCOCOSSD(){
       peopleNumber = peopleNumber + 1;
       
       stroke(255,92,0);
-      strokeWeight(4*4);
+      strokeWeight(4*resolution);
       noFill();
       rect(object.x, object.y, object.width, object.height);
       noStroke();
       fill(255,92,0);
-      textSize(16*4);
+      textSize(16*resolution);
       text(object.label+' '+peopleNumber, object.x + 120, object.y-24);
       
       let centerX = object.x + (object.width/2);
       let centerY = object.y + (object.height/2);
-      strokeWeight(4*4);
+      strokeWeight(4*resolution);
       stroke(255,92,0);
       point(centerX, centerY);
       
@@ -306,12 +310,12 @@ function saveReport(){
   if (state==3){
     fill(0, 157);
     noStroke();
-    rect(145*4,82*4,450*4,180*4,10*4);
+    rect(145*resolution,82*resolution,450*resolution,180*resolution,10*resolution);
 
     textFont('Space Mono');
-    textSize(16*4);
+    textSize(16*resolution);
     textAlign(CENTER);
     fill(255);
-    text("ID: " + fileName + '\n' + '\n' + 'Total Runtime: ' + recordingTime, 370*4, 153*4)
+    text("ID: " + fileName + '\n' + '\n' + 'Total Runtime: ' + recordingTime, 370*resolution, 153*resolution)
   }
 }
