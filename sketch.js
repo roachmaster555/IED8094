@@ -56,10 +56,11 @@ function setup() {
     }
   }
   
-  createCanvas(2960, 1440);
+  //createCanvas(2960, 1440);
+  createCanvas(windowWidth, windowHeight);
   webcam = createCapture(rearSetting);
-  //webcam = createCapture(VIDEO);
-  webcam.size(2960, 1224);
+  //webcam.size(2960, 1224);
+  webcam.size(windowWidth, windowHeight);
   webcam.hide();
   
   myVideoRec = new P5MovRec();
@@ -70,7 +71,8 @@ function setup() {
 function draw() {
   background(0);
   calculateRecordingTime();
-  drawVideoPreview(0,0,2960,1224);
+  //drawVideoPreview(0,0,2960,1224);
+  drawVideoPreview(0,0,windowWidth,windowHeight);
   if(state==1){
     doCOCOSSD();
     writeLog();
@@ -122,6 +124,10 @@ function drawCounter(currentState){
 }
 
 function drawStatusBar(currentState){
+  fill(0);
+  noStroke();
+  rect(0,306*4, 740*4, 54*4);
+  
   fill(255, 51);
   noStroke();
   rect(14*4,312*4,72*4,40*4,10*4);
